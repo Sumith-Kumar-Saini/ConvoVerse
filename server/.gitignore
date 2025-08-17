@@ -1,0 +1,29 @@
+# Node.js dependencies
+node_modules/
+
+# TypeScript output
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+
+# Log files
+*.log
+*.log.*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Miscellaneous
+*.tgz
+*.gz
+*.bak
+
+# Ignore compiled TypeScript files
+src/**/*.js
+src/**/*.d.ts
