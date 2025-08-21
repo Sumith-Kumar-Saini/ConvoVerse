@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
 import UserModel from "../models/user.model";
 import { generateToken } from "../services/token.service";
 import { IUser } from "../types/user";
@@ -119,6 +120,52 @@ export async function login(req: Request, res: Response) {
     return res.easyResponse({
       statusCode: 500,
       message: "Unable to process login request at this time",
+      error: err as Error,
+    });
+  }
+}
+
+export async function refresh(req: Request, res: Response) {
+  const token: string | undefined = req.cookies?.refreshToken;
+
+  if (!token)
+    return res.easyResponse({
+      statusCode: 400,
+      message: "Refresh token is missing or invalid.",
+    });
+
+  try {
+    const decoded = jwt.verify(token, ENV.REFRESH_TOKEN_SECRET) as {
+      userId: string;
+    };
+
+    const user = await UserModel.findById(decoded.userId);
+
+    if (!user)
+      return res.easyResponse({
+        statusCode: 401,
+        message: "User not found, please log in again.",
+      });
+
+    const { accessToken, refreshToken } = generateToken(user._id.toString());
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      httpOnly: true,
+      secure: ENV.NODE_ENV === "production", // Use secure cookies in production
+    });
+
+    return res.easyResponse({
+      statusCode: 200,
+      message: "Tokens refreshed successfully.",
+      payload: {
+        accessToken,
+      },
+    });
+  } catch (err) {
+    return res.easyResponse({
+      statusCode: 401,
+      message: "Invalid or expired refresh token.",
       error: err as Error,
     });
   }
