@@ -29,18 +29,18 @@ export async function register(req: Request, res: Response) {
     //   { upsert: true, new: true, runValidators: true } // Insert if not found, return the document
     // );
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const user: IUser = await UserModel.create({
       username,
       email,
-      password: hashedPassword,
+      password,
     });
 
     // we would use JWT ID in future to whitelist the user account
     const { /* JTI, */ refreshToken, accessToken } = generateToken(
       user._id.toString()
     );
+
+    const sanitizedUser = user.removeFields("createdAt updatedAt __v password");
 
     res.cookie("refreshToken", refreshToken, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -52,7 +52,7 @@ export async function register(req: Request, res: Response) {
       statusCode: 201,
       message: "User successfully created",
       payload: {
-        user: user.toJSON(),
+        user: sanitizedUser,
         accessToken,
       },
     });
@@ -60,6 +60,65 @@ export async function register(req: Request, res: Response) {
     return res.easyResponse({
       statusCode: 500,
       message: "Unable to create account at this time",
+      error: err as Error,
+    });
+  }
+}
+
+export async function login(req: Request, res: Response) {
+  const {
+    email,
+    username,
+    password,
+  }: { email?: string; username?: string; password: string } =
+    req.validatedData?.body || {};
+
+  const identity = (email || username) as string;
+
+  try {
+    const user = await UserModel.findOne<IUser>({
+      $or: [{ username: identity }, { email: identity }],
+    });
+
+    if (!user)
+      return res.easyResponse({
+        statusCode: 404,
+        message: "No account found with the provided credentials.",
+      });
+
+    const isValid = await bcrypt.compare(password, user.password);
+
+    if (!isValid)
+      return res.easyResponse({
+        statusCode: 401,
+        message: "Invalid credentials",
+      });
+
+    const { /* JTI, */ accessToken, refreshToken } = generateToken(
+      user._id.toString()
+    );
+
+    const sanitizedUser = user.removeFields("createdAt updatedAt __v password");
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: ENV.NODE_ENV === "production",
+    });
+
+    return res.easyResponse({
+      statusCode: 200,
+      message: "Login successful",
+      payload: {
+        user: sanitizedUser,
+        accessToken,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.easyResponse({
+      statusCode: 500,
+      message: "Unable to process login request at this time",
       error: err as Error,
     });
   }

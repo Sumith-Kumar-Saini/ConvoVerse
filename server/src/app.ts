@@ -1,23 +1,10 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 
 import authRouter from "./routers/auth.routes";
 import ApiResponse from "./middlewares/easyResponse";
 
-import { ValidatedData } from "./types/schema";
-import { ERParam } from "./types";
-
-declare global {
-  namespace Express {
-    interface Request {
-      validatedData?: ValidatedData;
-    }
-
-    interface Response {
-      easyResponse: (param: ERParam) => void;
-    }
-  }
-}
+import { Response } from "./types";
 
 const app = express();
 

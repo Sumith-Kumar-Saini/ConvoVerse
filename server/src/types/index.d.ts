@@ -1,4 +1,5 @@
 import ApiResponse from "../middlewares/easyResponse";
+export * from "./express";
 
 export interface GenerateResponseParam {
   statusCode: number;
