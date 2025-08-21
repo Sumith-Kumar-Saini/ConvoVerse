@@ -43,3 +43,5 @@ coverage/
 # Ignore compiled TypeScript files (if not in dist/)
 src/**/*.js
 src/**/*.d.ts
+
+task2complete.md
