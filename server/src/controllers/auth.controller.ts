@@ -170,3 +170,12 @@ export async function refresh(req: Request, res: Response) {
     });
   }
 }
+
+export async function logout(req: Request, res: Response) {
+  res.clearCookie("refreshToken");
+  /* In future, we have to remove JTI from whiteList in redis */
+  res.easyResponse({
+    statusCode: 200,
+    message: "User successfully logged out",
+  });
+}
