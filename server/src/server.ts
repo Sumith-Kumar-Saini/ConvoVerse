@@ -1,25 +1,33 @@
-import dotenv from "dotenv";
-dotenv.config({ quiet: true }); // Load environment variables
+import { config } from "dotenv";
+config({ quiet: true }); // Load environment variables
 
 import { createServer } from "http";
-import app from "./app"; // Import the Express app
 import { ENV } from "./configs/config";
 import connectDB from "./configs/db";
+import { socketServer } from "./sockets/server";
 
 async function main() {
+  const { default: app } = await import("./app"); // dynamic import the Express app for speed
+
   const server = createServer(app);
   const { PORT } = ENV;
-
-  await connectDB();
+  const [io, DBConnection] = await Promise.all([
+    socketServer(server),
+    connectDB(),
+  ]);
 
   server.listen(PORT, () => {
-    console.error(`Server Listening on ${PORT}`);
+    console.log(`Server Listening on ${PORT}`);
   });
 
   const shutdown = async () => {
-    console.error("Shutdown initiated");
+    console.log("Shutdown initiated");
+
+    io.close();
+    DBConnection?.close();
+
     server.close(() => {
-      console.error("HTTP server closed");
+      console.log("HTTP server closed");
     });
     process.exit(0);
   };
