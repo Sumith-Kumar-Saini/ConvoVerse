@@ -4,7 +4,7 @@ import cookie from "cookie";
 export function cookieParser() {
   return (socket: Socket, next: (err?: ExtendedError | undefined) => void) => {
     const cookies: Record<string, string> = cookie.parse(
-      socket.request.headers?.cookie || ""
+      socket.handshake.headers?.cookie || ""
     );
     socket.request.cookies = cookies;
     next();
