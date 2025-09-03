@@ -4,25 +4,19 @@ import { log } from "console";
 
 // custom modules
 import { cookieParser } from "../middlewares/socketCookieParser";
+import Controller from "../controllers/mainSocket.controller";
 
 export function socketServer(server: Server): Promise<ioServer> {
   return new Promise((resolve, reject) => {
     try {
+      // socket initialize
       const io = new ioServer(server);
 
       // Middleware setup
       io.use(cookieParser());
 
       // Handle socket events
-      io.on("connection", (socket: Socket) => {
-        socket.on("message", (data) => {
-          socket.emit("message", Math.random().toString(36).slice(2, 12));
-        });
-
-        socket.on("disconnect", () => {
-          log("user disconnected", socket.id);
-        });
-      });
+      io.on("connection", Controller);
 
       // Resolve the promise with the IO instance when setup is complete
       resolve(io);

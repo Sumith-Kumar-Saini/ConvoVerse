@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/types"], // Include your custom types directory
+    "typeRoots": ["../node_modules/@types", "./src/types"], // Include your custom types directory
+    "types": ["node"], // Include type definitions for Node.js
     "target": "es6", // Output ES6 JavaScript
     "module": "commonjs", // CommonJS module system (Node.js default)
     "esModuleInterop": true, // Allows default imports from non-ES modules
