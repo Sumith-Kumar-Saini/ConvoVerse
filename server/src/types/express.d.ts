@@ -1,5 +1,6 @@
 import { Request, Response, Express } from "express";
 import { ValidatedData } from "./schema";
+import { EasyResponseFnc as EasyResponse } from "./easyResponse";
 import { ERParam } from ".";
 
 declare global {
@@ -9,7 +10,7 @@ declare global {
     }
 
     interface Response {
-      easyResponse: (param: ERParam) => void;
+      easyResponse: EasyResponse;
     }
   }
 }

@@ -6,7 +6,6 @@ export interface GenerateResponseParam {
   message: string;
   payload: object | null;
   error: Error | null;
-  originalUrl: string;
 }
 
 export interface EasyResponse {
