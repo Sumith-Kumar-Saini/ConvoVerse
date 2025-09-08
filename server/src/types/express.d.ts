@@ -1,7 +1,5 @@
 import { Request, Response, Express } from "express";
-import { ValidatedData } from "./schema";
-import { EasyResponseFnc as EasyResponse } from "./easyResponse";
-import { ERParam } from ".";
+import { ValidatedData, EasyResponseFnc as EasyResponse, ERParam } from ".";
 
 declare global {
   namespace Express {

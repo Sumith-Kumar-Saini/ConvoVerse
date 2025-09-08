@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { EasyResponse, GenerateResponseParam } from "../types";
-import { EasyResponseParameters } from "../types/easyResponse";
+import {
+  EasyResponse,
+  GenerateResponseParam,
+  EasyResponseFnc,
+  EasyResponseParameters,
+} from "../types";
 
 interface ERParam {
   statusCode: number;
@@ -18,18 +22,7 @@ export default class ApiResponse {
   public static easyResponse() {
     return (req: Request, res: Response, next: NextFunction) => {
       this.originalUrl = req.originalUrl;
-      res.easyResponse = (
-        ResObjOrCode: number | ERParam,
-        ResObjOrMsg?: string | EasyResponseParameters
-      ): void => {
-        const [response, error] = this.easyResponseGenerator(
-          ResObjOrCode,
-          ResObjOrMsg
-        );
-        if (error) return next(error);
-        if (!response) return next(new Error("Something want wrong"));
-        res.status(response.statusCode).json(response); // Send the response
-      };
+      res.easyResponse = this.EasyResponseMiddleware(req, res, next);
 
       // Proceed to the next middleware
       next();
@@ -110,5 +103,26 @@ export default class ApiResponse {
     const statusText = StatusCodes[statusCode];
     if (statusText) return statusText;
     return "INVALID_STATUS_CODE";
+  }
+
+  private static EasyResponseMiddleware(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const easyResponse: EasyResponseFnc = (
+      ResObjOrCode: number | ERParam,
+      ResObjOrMsg?: string | EasyResponseParameters
+    ) => {
+      const [response, error] = this.easyResponseGenerator(
+        ResObjOrCode,
+        ResObjOrMsg
+      );
+      if (error) return next(error);
+      if (!response) return next(new Error("Something want wrong"));
+      res.status(response.statusCode).json(response); // Send the response
+    };
+
+    return easyResponse;
   }
 }

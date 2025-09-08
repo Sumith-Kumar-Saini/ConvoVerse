@@ -5,7 +5,6 @@ import cors from "cors";
 import ApiResponse from "./middlewares/easyResponse";
 
 import { Response } from "./types";
-import { time, timeEnd } from "console";
 
 const app = express();
 
@@ -20,10 +19,8 @@ app.use(ApiResponse.easyResponse());
 
 // Base route
 app.get("/", (_, res: Response) => {
-  res.easyResponse({
-    statusCode: 200,
-    message: "Server is running properly",
-  });
+  const message = "Server is running properly";
+  res.easyResponse(200, message);
 });
 
 // Lazy-load routes

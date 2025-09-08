@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import { ENV } from "../configs/config";
-import { IUser } from "../types/user";
+import { IUser } from "../types";
 
 const { BCRYPT_SALT_ROUNDS: SALT_ROUNDS } = ENV;
 

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import UserModel from "../models/user.model";
 import { generateToken } from "../services/token.service";
-import { IUser } from "../types/user";
+import { IUser } from "../types";
 import { ENV } from "../configs/config";
 
 export async function register(req: Request, res: Response) {
