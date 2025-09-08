@@ -20,7 +20,10 @@ app.use(ApiResponse.easyResponse());
 
 // Base route
 app.get("/", (_, res: Response) => {
-  res.easyResponse({ statusCode: 200, message: "Server is running properly" });
+  res.easyResponse({
+    statusCode: 200,
+    message: "Server is running properly",
+  });
 });
 
 // Lazy-load routes

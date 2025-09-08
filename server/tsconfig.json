@@ -7,11 +7,9 @@
     "skipLibCheck": true, // Skip type checking of declaration files
     "outDir": "./dist", // Output compiled JS files to 'dist'
     "rootDir": "./src", // Set the root directory for TS files
-    "moduleResolution": "node", // Use Node-style module resolution
     "resolveJsonModule": true, // Allow importing JSON files
     "strict": true, // Enable all strict type-checking options
     "forceConsistentCasingInFileNames": true,
-    "ignoreDeprecations": "6.0"
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts"], // Include all .ts files in 'src' directory
   "exclude": ["node_modules"] // Exclude node_modules

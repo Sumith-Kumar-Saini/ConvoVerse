@@ -1,15 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { EasyResponse, GenerateResponseParam } from "../types";
+import { EasyResponseParameters } from "../types/easyResponse";
 
 interface ERParam {
   statusCode: number;
-  message: string;
-  payload?: object | null;
-  error?: Error | null;
-}
-
-interface EasyResponseParameters {
   message: string;
   payload?: object | null;
   error?: Error | null;
@@ -23,8 +18,14 @@ export default class ApiResponse {
   public static easyResponse() {
     return (req: Request, res: Response, next: NextFunction) => {
       this.originalUrl = req.originalUrl;
-      res.easyResponse = (...params) => {
-        const [response, error] = this.easyResponseGenerator(...params);
+      res.easyResponse = (
+        ResObjOrCode: number | ERParam,
+        ResObjOrMsg?: string | EasyResponseParameters
+      ): void => {
+        const [response, error] = this.easyResponseGenerator(
+          ResObjOrCode,
+          ResObjOrMsg
+        );
         if (error) return next(error);
         if (!response) return next(new Error("Something want wrong"));
         res.status(response.statusCode).json(response); // Send the response
@@ -34,13 +35,6 @@ export default class ApiResponse {
       next();
     };
   }
-
-  private static easyResponseGenerator(
-    ResObjOrCode: number,
-    ResObjOrMsg: string | EasyResponseParameters
-  ): EasyResponseArray;
-
-  private static easyResponseGenerator(ResObjOrCode: ERParam): EasyResponseArray;
 
   private static easyResponseGenerator(
     ResObjOrCode: number | ERParam,

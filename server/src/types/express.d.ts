@@ -20,5 +20,5 @@ export interface Request {
 }
 
 export interface Response {
-  easyResponse: (param: ERParam) => void;
+  easyResponse: EasyResponse;
 }
