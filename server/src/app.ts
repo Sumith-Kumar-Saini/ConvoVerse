@@ -1,10 +1,10 @@
-import express from "express";
+import "./types";
+import express, { Response } from "express";
 import CookieParser from "cookie-parser";
 import cors from "cors";
 
 import ApiResponse from "./middlewares/easyResponse";
-
-import { Response } from "./types";
+import lazyRouter from "./utils/lazyLoadRoutes";
 
 const app = express();
 
@@ -24,13 +24,14 @@ app.get("/", (_, res: Response) => {
 });
 
 // Lazy-load routes
-app.use("/api/auth", async (req, res, next) => {
-  const { default: authRouter } = await import("./routers/auth.routes");
-  return authRouter(req, res, next);
-});
+app.use(
+  "/api/auth",
+  lazyRouter(() => import("./routers/auth.routes"))
+);
 
-app.use("/api/chat", async (req, res, next) => {
-  
-})
+app.use(
+  "/api/chat",
+  lazyRouter(() => import("./routers/chat.routes"))
+);
 
 export default app;
