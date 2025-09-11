@@ -29,4 +29,8 @@ app.use("/api/auth", async (req, res, next) => {
   return authRouter(req, res, next);
 });
 
+app.use("/api/chat", async (req, res, next) => {
+  
+})
+
 export default app;

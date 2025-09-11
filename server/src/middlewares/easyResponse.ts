@@ -5,14 +5,8 @@ import {
   GenerateResponseParam,
   EasyResponseFnc,
   EasyResponseParameters,
+  ERParam,
 } from "../types";
-
-interface ERParam {
-  statusCode: number;
-  message: string;
-  payload?: object | null;
-  error?: Error | null;
-}
 
 type EasyResponseArray = [EasyResponse | null, Error | undefined];
 

@@ -11,6 +11,6 @@
     "strict": true, // Enable all strict type-checking options
     "forceConsistentCasingInFileNames": true,
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"], // Include all .ts files in 'src' directory
+  "include": ["src/**/*.ts"], // Include all .ts files in 'src' directory
   "exclude": ["node_modules"] // Exclude node_modules
 }
