@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import { ENV } from "./env";
+import { logger } from "../utils/logger";
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY_MS = 2000;
 const MONGODB_URI = ENV.MONGODB_URI || "mongodb://localhost:27017/convoverse";
 
 if (!MONGODB_URI) {
-  console.error("MONGODB_URI is not provided in environment variables.");
+  logger.error("MONGODB_URI is not provided in environment variables.");
   process.exit(1); // Fail-fast to avoid unpredictable state
 }
 
@@ -14,21 +15,21 @@ async function connectDB(retries = MAX_RETRIES) {
   try {
     await mongoose.connect(MONGODB_URI);
 
-    console.log("MongoDB connected successfully");
+    logger.info("MongoDB connected successfully");
     return mongoose.connection;
   } catch (error) {
-    console.error(
+    logger.error(
       `MongoDB connection failed [${
         MAX_RETRIES - retries + 1
       } attempt(s) left]: ${(error as Error).message}`
     );
 
     if (retries <= 1) {
-      console.error("Exhausted all retries. Exiting process.");
+      logger.error("Exhausted all retries. Exiting process.");
       process.exit(1); // Critical failure
     }
 
-    console.log(`Retrying MongoDB connection in ${RETRY_DELAY_MS / 1000}s...`);
+    logger.info(`Retrying MongoDB connection in ${RETRY_DELAY_MS / 1000}s...`);
     setTimeout(() => connectDB(retries - 1), RETRY_DELAY_MS);
   }
 }

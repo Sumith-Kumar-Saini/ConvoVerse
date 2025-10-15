@@ -2,6 +2,7 @@ import { createServer } from "http";
 import { ENV } from "./configs/env";
 import connectDB from "./configs/db";
 import { socketServer } from "./sockets";
+import { logger } from "./utils/logger";
 
 async function main() {
   const { default: app } = await import("./app"); // dynamic import the Express app for speed
@@ -14,17 +15,17 @@ async function main() {
   ]);
 
   server.listen(PORT, () => {
-    console.log(`Server Listening on ${PORT}`);
+    logger.info(`Server Listening on ${PORT}`);
   });
 
   const shutdown = async () => {
-    console.log("Shutdown initiated");
+    logger.info("Shutdown initiated");
 
     io.close();
     DBConnection?.close();
 
     server.close(() => {
-      console.log("HTTP server closed");
+      logger.info("HTTP server closed");
     });
     process.exit(0);
   };
@@ -34,6 +35,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("Startup error", err);
+  logger.error("Startup error", err);
   process.exit(1);
 });

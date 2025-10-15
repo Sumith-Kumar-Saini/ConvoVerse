@@ -7,6 +7,7 @@ import ApiResponse from "./middlewares/easyResponse";
 import globalErrorHandler from "./middlewares/errorHandler";
 import lazyRouter from "./utils/lazyLoadRoutes";
 import AppError from "./utils/AppError";
+import { morganMiddleware } from "./middlewares/morgan.middleware";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(CookieParser());
+app.use(morganMiddleware);
 
 app.use(ApiResponse.easyResponse());
 

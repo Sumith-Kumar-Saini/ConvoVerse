@@ -110,7 +110,6 @@ export async function login(req: Request, res: Response) {
       },
     });
   } catch (err) {
-    console.log(err);
     return res.easyResponse({
       statusCode: 500,
       message: "Unable to process login request at this time",
