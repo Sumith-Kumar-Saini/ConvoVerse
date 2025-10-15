@@ -2,7 +2,7 @@ import { config } from "dotenv";
 config({ quiet: true }); // Load environment variables
 
 import { createServer } from "http";
-import { ENV } from "./configs/config";
+import { ENV } from "./configs/env";
 import connectDB from "./configs/db";
 import { socketServer } from "./sockets/server";
 

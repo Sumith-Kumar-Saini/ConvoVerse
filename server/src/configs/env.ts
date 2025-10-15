@@ -8,7 +8,7 @@ const _config = {
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
 };
 
-const ENV_DEV = process.env.NODE_ENV == "development";
+const ENV_DEV = process.env.NODE_ENV == "testing";
 const ENV = ENV_DEV ? _config : Object.freeze(_config);
 
 export { ENV };

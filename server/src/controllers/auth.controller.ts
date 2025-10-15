@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import UserModel from "../models/user.model";
 import { generateToken } from "../services/token.service";
 import { IUser } from "../types";
-import { ENV } from "../configs/config";
+import { ENV } from "../configs/env";
 
 export async function register(req: Request, res: Response) {
   const {

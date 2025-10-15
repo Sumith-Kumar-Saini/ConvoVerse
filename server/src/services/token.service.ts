@@ -1,6 +1,6 @@
 import JWT from "jsonwebtoken";
 import crypto from "node:crypto";
-import { ENV } from "../configs/config";
+import { ENV } from "../configs/env";
 
 const generateAccessToken = (payload: Record<string, any>) => {
   const token = JWT.sign(payload, ENV.ACCESS_TOKEN_SECRET, {
