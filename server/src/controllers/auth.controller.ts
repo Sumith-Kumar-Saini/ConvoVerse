@@ -6,17 +6,15 @@ import UserModel from "../models/user.model";
 import { generateToken } from "../services/token.service";
 import { IUser } from "../types";
 import { ENV } from "../configs/env";
+import { loginSchema, registerSchema } from "../schemas";
+import z from "zod";
 
 export async function register(req: Request, res: Response) {
-  const {
-    email,
-    username,
-    password,
-  }: { email: string; username: string; password: string } =
-    req.validatedData?.body || {};
+  type RegisterBody = z.infer<typeof registerSchema>["body"];
+  const { email, username, password } = req.validatedData?.body as RegisterBody;
 
   try {
-    const exist = await UserModel.findOne({ $or: [{ username }, { email }] });
+    const exist = await UserModel.exists({ $or: [{ username }, { email }] });
     if (exist)
       return res.easyResponse({
         statusCode: 409,
@@ -67,18 +65,14 @@ export async function register(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
-  const {
-    email,
-    username,
-    password,
-  }: { email?: string; username?: string; password: string } =
-    req.validatedData?.body || {};
+  type LoginBody = z.infer<typeof loginSchema>["body"];
+  const { email, username, password } = req.validatedData?.body as LoginBody;
 
-  const identity = (email || username) as string;
+  const identifier = (email || username) as string;
 
   try {
     const user = await UserModel.findOne<IUser>({
-      $or: [{ username: identity }, { email: identity }],
+      $or: [{ username: identifier }, { email: identifier }],
     });
 
     if (!user)
