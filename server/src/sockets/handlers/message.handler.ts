@@ -3,8 +3,8 @@ import { ISocketEventHandler } from "../interfaces/ISocketEventHandler";
 
 export class MessageHandler implements ISocketEventHandler {
   register(socket: Socket): void {
-    socket.on("message", () => {
-      socket.emit("message", this.generateResponse());
+    socket.on("message", (data: any, ack?: (response: any) => void) => {
+      ack && ack(this.generateResponse());
     });
   }
 

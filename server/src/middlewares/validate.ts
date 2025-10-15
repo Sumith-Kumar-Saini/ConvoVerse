@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError, ZodObject } from "zod";
+import { ValidatedData } from "../types";
 
 export const validate =
   <T>(schema: ZodObject<any>) =>
@@ -10,7 +11,7 @@ export const validate =
         query: req.query,
         params: req.params,
       });
-      req.validatedData = parsed;
+      req.validatedData = parsed as ValidatedData;
       next();
     } catch (err) {
       if (err instanceof ZodError) {

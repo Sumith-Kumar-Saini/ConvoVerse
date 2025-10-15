@@ -5,7 +5,7 @@ export class ChatHandler implements ISocketEventHandler {
   register(socket: Socket): void {
     socket.on(
       "chat:open",
-      (chatId: string, ack: (response: any) => void) =>
+      ({ chatId }: { chatId: string }, ack?: (response: any) => void) =>
         ack && ack("Chat open Event is working")
     );
   }
