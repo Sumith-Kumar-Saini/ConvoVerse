@@ -11,24 +11,36 @@ root/
 │   ├── public/                 # Public files (e.g., index.html)
 │   ├── src/                    # React source code
 │   │   ├── components/         # React components
-│   │   ├── App.tsx             # Main app component
-│   │   ├── main.tsx            # Entry point for React
+│   │   ├── styles/             # Global styles
 │   │   ├── store/              # Redux store setup
-│   │   └── styles/             # Global styles
+│   │   ├── App.tsx             # Main app component
+│   │   └── main.tsx            # Entry point for React
 │   ├── package.json            # Frontend dependencies
 │   └── vite.config.ts          # Vite config for frontend
-├── server/                     # Express.js backend
-│   ├── src/                    # Backend source code
-│   │   ├── controllers/        # API controllers
-│   │   ├── middlewares/        # Authentication & socket middleware
-│   │   ├── sockets/            # Socket.io event handling
-│   │   ├── app.ts              # Express app setup
-│   │   └── server.ts           # Server entry point
-│   ├── package.json            # Backend dependencies
+├── server/                       # Backend (Express + Socket.IO + Redis)
+│   ├── package.json              # Backend dependencies
+│   └── src/                      # Source code for the server
+│       ├── app.ts                # Express app initialization
+│       ├── server.ts             # Server entry point
+│       ├── configs/              # Environment & DB configurations
+│       ├── controllers/          # Route handlers for various features
+│       ├── middlewares/          # Global middlewares (logging, validation, errors)
+│       ├── models/               # Mongoose (or ORM) data models
+│       ├── routers/              # Express route definitions
+│       ├── schemas/              # Zod validation schemas
+│       ├── services/             # Business logic (e.g., JWT, token handling)
+│       ├── sockets/              # Socket.IO server logic
+│       │   ├── core/             # Socket.IO core logic
+│       │   ├── handlers/         # Event handlers (chat, message, etc.)
+│       │   ├── interfaces/       # Socket types & contracts
+│       │   └── middlewares/      # Socket-level middleware
+│       ├── types/                # TypeScript type definitions
+│       └── utils/                # Utility functions and helpers
+│           └── logger/           # Logger setup using transports and formatters
 ├── package.json                # Root project dependencies
 └── README.md                   # Project documentation
 
-````
+```
 
 ## Features
 
