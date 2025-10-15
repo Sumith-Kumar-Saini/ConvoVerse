@@ -1,5 +1,3 @@
-import { ERParam } from ".";
-
 export type EasyResponseArray = [EasyResponse | null, Error | undefined];
 
 export interface EasyResponseParameters {

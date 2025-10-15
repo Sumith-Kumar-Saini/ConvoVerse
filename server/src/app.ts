@@ -4,7 +4,9 @@ import CookieParser from "cookie-parser";
 import cors from "cors";
 
 import ApiResponse from "./middlewares/easyResponse";
+import globalErrorHandler from "./middlewares/errorHandler";
 import lazyRouter from "./utils/lazyLoadRoutes";
+import AppError from "./utils/AppError";
 
 const app = express();
 
@@ -33,5 +35,12 @@ app.use(
   "/api/chat",
   lazyRouter(() => import("./routers/chat.routes"))
 );
+
+// Handle unfounded routes (404)
+app.all("/*path", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+app.use(globalErrorHandler());
 
 export default app;

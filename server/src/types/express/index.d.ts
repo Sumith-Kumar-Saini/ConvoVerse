@@ -12,11 +12,3 @@ declare global {
     }
   }
 }
-
-export interface Request {
-  validatedData?: ValidatedData;
-}
-
-export interface Response {
-  easyResponse: EasyResponse;
-}

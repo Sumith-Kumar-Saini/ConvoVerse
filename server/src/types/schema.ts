@@ -1,4 +1,5 @@
 import * as schemas from "../schemas"; // Import everything from schemas
+import z from "zod";
 
 // Create a union type of all schema types
 type AllSchemas = typeof schemas;

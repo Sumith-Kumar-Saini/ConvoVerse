@@ -1,3 +1,6 @@
+import { config } from "dotenv";
+config({ quiet: true }); // Load environment variables
+
 const _config = {
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT || 3000,

@@ -1,10 +1,7 @@
-import { config } from "dotenv";
-config({ quiet: true }); // Load environment variables
-
 import { createServer } from "http";
 import { ENV } from "./configs/env";
 import connectDB from "./configs/db";
-import { socketServer } from "./sockets/server";
+import { socketServer } from "./sockets";
 
 async function main() {
   const { default: app } = await import("./app"); // dynamic import the Express app for speed
