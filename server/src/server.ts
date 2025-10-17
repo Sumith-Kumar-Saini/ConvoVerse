@@ -7,6 +7,8 @@ import { logger } from "./utils/logger";
 async function main() {
   const { default: app } = await import("./app"); // dynamic import the Express app for speed
 
+  logger.info("Server initiating")
+
   const server = createServer(app);
   const { PORT } = ENV;
   const [io, DBConnection] = await Promise.all([
