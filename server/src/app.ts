@@ -1,5 +1,4 @@
 import "./types";
-import mongoSanitize from "express-mongo-sanitize";
 import express, { Response } from "express";
 import CookieParser from "cookie-parser";
 import helmet from "helmet";
@@ -19,7 +18,6 @@ app.use(xss());
 app.use(cors());
 app.use(helmet());
 app.use(CookieParser());
-app.use(mongoSanitize());
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 
