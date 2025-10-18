@@ -1,7 +1,6 @@
 import { Redis, RedisOptions } from "ioredis";
 
-export interface IRedisService {
-  readonly client: Redis;
+export interface IRedisClient {
   connect(): Promise<void>;
   disconnect(): Promise<void>;
   getClient(): Redis;

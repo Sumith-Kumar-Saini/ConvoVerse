@@ -1,6 +1,8 @@
 import { IRedisConfig } from "../interfaces/redis.interface";
 import { ENV } from "./env";
 
+type ConfigParam = typeof ENV.REDIS;
+
 export class RedisConfig implements IRedisConfig {
   public host: string;
   public port: number;
@@ -8,8 +10,7 @@ export class RedisConfig implements IRedisConfig {
   public username?: string;
   public password?: string;
 
-  constructor() {
-    const { REDIS } = ENV;
+  constructor(REDIS: ConfigParam) {
     this.host = REDIS.HOST;
     this.port = REDIS.PORT;
     this.username = REDIS.USERNAME;
