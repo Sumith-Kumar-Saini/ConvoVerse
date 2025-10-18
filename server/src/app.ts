@@ -20,9 +20,7 @@ app.use(helmet());
 app.use(CookieParser());
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
-
-app.use(morganMiddleware);
-
+app.use(morganMiddleware());
 app.use(ApiResponse.easyResponse());
 
 // Base route

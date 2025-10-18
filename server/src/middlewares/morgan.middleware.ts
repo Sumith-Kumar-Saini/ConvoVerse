@@ -1,4 +1,3 @@
-// server/src/middlewares/morgan.middleware.ts
 import morgan from "morgan";
 import { loggerStream } from "../utils/logger";
 
@@ -8,7 +7,8 @@ const skip = () => {
 };
 
 // Morgan combined with Winston
-export const morganMiddleware = morgan(
-  ":method :url :status :res[content-length] - :response-time ms",
-  { stream: loggerStream, skip }
-);
+export const morganMiddleware = () =>
+  morgan(":method :url :status :res[content-length] - :response-time ms", {
+    stream: loggerStream,
+    skip,
+  });
