@@ -45,4 +45,7 @@ coverage/
 src/**/*.js
 src/**/*.d.ts
 
-task2complete.md
+# temp files
+TEMP
+temp
+temp.*
