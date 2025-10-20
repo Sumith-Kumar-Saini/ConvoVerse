@@ -15,8 +15,7 @@ export const validate =
       next();
     } catch (err) {
       if (err instanceof ZodError) {
-        return res.easyResponse({
-          statusCode: 400,
+        return res.status(400).json({
           message: "Invalid input",
           payload: {
             error: err.issues.map((issue) => ({

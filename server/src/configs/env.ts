@@ -9,6 +9,8 @@ const _config = {
     parseInt(process.env.BCRYPT_SALT_ROUNDS || "12", 10) || 10,
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET as string,
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
+  ENABLE_XSS_PROTECTION: process.env.ENABLE_XSS_PROTECTION,
+  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
   REDIS: {
     HOST: process.env.REDIS_HOST || "localhost",
     PORT: Number(process.env.REDIS_PORT) || 6379,

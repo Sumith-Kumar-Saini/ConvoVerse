@@ -9,14 +9,13 @@ const globalErrorHandler = () =>
     const status = err.status || "error";
     const message = err.message || "Something went wrong!";
 
-    logger.error(err.stack || err.message);
-
     // Send a user-friendly error response (avoid leaking sensitive information)
     res.status(statusCode).json({
       status,
       message,
       stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
     });
+    logger.error(err.stack || err.message);
   };
 
 export default globalErrorHandler;

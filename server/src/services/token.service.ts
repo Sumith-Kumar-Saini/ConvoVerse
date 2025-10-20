@@ -18,7 +18,7 @@ const generateRefreshToken = (payload: Record<string, any>) => {
 
 export const generateToken = (userId: string) => {
   const JTI = crypto.randomUUID();
-  const payload = { userId, JTI };
+  const payload = { id: userId, JTI };
   const accessToken = generateAccessToken(payload);
   const refreshToken = generateRefreshToken(payload);
 

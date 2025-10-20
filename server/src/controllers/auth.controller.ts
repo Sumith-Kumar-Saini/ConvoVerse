@@ -72,22 +72,48 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   const identifier = (email || username) as string;
 
   try {
-    const user = await UserModel.findOne<IUser>({
+    // test --
+    const start = Date.now();
+    const user = await UserModel.findOne({
       $or: [{ username: identifier }, { email: identifier }],
     });
+    console.log("⏱️ DB query time:", Date.now() - start, "ms");
 
     if (!user)
       return next(
         new AppError("No account found with the provided credentials.", 404)
       );
 
+    const bcryptStart = Date.now();
     const isValid = await bcrypt.compare(password, user.password);
+    console.log("⏱️ Bcrypt compare time:", Date.now() - bcryptStart, "ms");
 
     if (!isValid) return next(new AppError("Invalid credentials", 401));
 
-    const { /* JTI, */ accessToken, refreshToken } = generateToken(
-      user._id.toString()
-    );
+    const jwtStart = Date.now();
+    const tokens = generateToken(user._id.toString());
+    console.log("⏱️ JWT generation time:", Date.now() - jwtStart, "ms");
+
+    const { accessToken, refreshToken } = tokens;
+
+    // ---
+
+    // const user = await UserModel.findOne<IUser>({
+    //   $or: [{ username: identifier }, { email: identifier }],
+    // });
+
+    // if (!user)
+    //   return next(
+    //     new AppError("No account found with the provided credentials.", 404)
+    //   );
+
+    // const isValid = await bcrypt.compare(password, user.password);
+
+    // if (!isValid) return next(new AppError("Invalid credentials", 401));
+
+    // const { /* JTI, */ accessToken, refreshToken } = generateToken(
+    //   user._id.toString()
+    // );
 
     const sanitizedUser = user.removeFields("createdAt updatedAt __v password");
 
