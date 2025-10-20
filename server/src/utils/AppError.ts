@@ -1,18 +1,35 @@
-class AppError extends Error {
-  public statusCode: number;
-  public status: string;
-  public isOperational: boolean;
+export interface AppErrorOptions {
+  cause?: Error;
+}
 
-  constructor(message: string, statusCode: number) {
-    super(message); // Call the parent Error constructor
+export default class AppError extends Error {
+  public statusCode: number;
+  public status: "fail" | "error";
+  public isOperational: boolean;
+  public cause?: Error;
+
+  constructor(
+    message: string,
+    statusCode: number,
+    options: AppErrorOptions = {}
+  ) {
+    super(message);
+
+    Object.setPrototypeOf(this, new.target.prototype); // Restore prototype chain
 
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
-    this.isOperational = true; // Indicates if this is an error expected by the application
+    this.isOperational = true;
 
-    // Capture the stack trace, excluding the constructor call itself
-    Error.captureStackTrace(this, this.constructor);
+    if (options.cause instanceof Error) {
+      this.cause = options.cause;
+      this.stack = options.cause.stack;
+    }
+
+    this.name = this.constructor.name;
+
+    if (!options.cause) {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
-
-export default AppError;

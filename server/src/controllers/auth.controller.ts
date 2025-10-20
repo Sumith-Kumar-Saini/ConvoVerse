@@ -1,25 +1,27 @@
-import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-
-import UserModel from "../models/user.model";
-import { generateToken } from "../services/token.service";
-import { IUser } from "../types";
-import { ENV } from "../configs/env";
-import { loginSchema, registerSchema } from "../schemas";
+import bcrypt from "bcryptjs";
 import z from "zod";
 
-export async function register(req: Request, res: Response) {
+import type { loginSchema, registerSchema } from "../schemas";
+import { generateToken } from "../services/token.service";
+import UserModel from "../models/user.model";
+import AppError from "../utils/AppError";
+import { ENV } from "../configs/env";
+import { IUser } from "../types";
+
+export async function register(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   type RegisterBody = z.infer<typeof registerSchema>["body"];
   const { email, username, password } = req.validatedData?.body as RegisterBody;
 
   try {
     const exist = await UserModel.exists({ $or: [{ username }, { email }] });
     if (exist)
-      return res.easyResponse({
-        statusCode: 409,
-        message: "username or email already exists",
-      });
+      return next(new AppError("username or email already exists", 409));
 
     /* we can check if the user exist or not - if not it will create a user in one go */
     // const user = await UserModel.findOneAndUpdate(
@@ -47,8 +49,7 @@ export async function register(req: Request, res: Response) {
       secure: ENV.NODE_ENV === "production",
     });
 
-    return res.easyResponse({
-      statusCode: 201,
+    return res.status(201).json({
       message: "User successfully created",
       payload: {
         user: sanitizedUser,
@@ -56,15 +57,15 @@ export async function register(req: Request, res: Response) {
       },
     });
   } catch (err) {
-    return res.easyResponse({
-      statusCode: 500,
-      message: "Unable to create account at this time",
-      error: err as Error,
-    });
+    next(
+      new AppError("Unable to create account at this time", 500, {
+        cause: err as Error,
+      })
+    );
   }
 }
 
-export async function login(req: Request, res: Response) {
+export async function login(req: Request, res: Response, next: NextFunction) {
   type LoginBody = z.infer<typeof loginSchema>["body"];
   const { email, username, password } = req.validatedData?.body as LoginBody;
 
@@ -76,18 +77,13 @@ export async function login(req: Request, res: Response) {
     });
 
     if (!user)
-      return res.easyResponse({
-        statusCode: 404,
-        message: "No account found with the provided credentials.",
-      });
+      return next(
+        new AppError("No account found with the provided credentials.", 404)
+      );
 
     const isValid = await bcrypt.compare(password, user.password);
 
-    if (!isValid)
-      return res.easyResponse({
-        statusCode: 401,
-        message: "Invalid credentials",
-      });
+    if (!isValid) return next(new AppError("Invalid credentials", 401));
 
     const { /* JTI, */ accessToken, refreshToken } = generateToken(
       user._id.toString()
@@ -101,8 +97,7 @@ export async function login(req: Request, res: Response) {
       secure: ENV.NODE_ENV === "production",
     });
 
-    return res.easyResponse({
-      statusCode: 200,
+    return res.status(200).json({
       message: "Login successful",
       payload: {
         user: sanitizedUser,
@@ -110,20 +105,19 @@ export async function login(req: Request, res: Response) {
       },
     });
   } catch (err) {
-    return res.easyResponse({
-      statusCode: 500,
-      message: "Unable to process login request at this time",
-      error: err as Error,
-    });
+    next(
+      new AppError("Unable to process login request at this time", 500, {
+        cause: err as Error,
+      })
+    );
   }
 }
 
-export async function refresh(req: Request, res: Response) {
+export async function refresh(req: Request, res: Response, next: NextFunction) {
   const token: string | undefined = req.cookies?.refreshToken;
 
   if (!token)
-    return res.easyResponse({
-      statusCode: 400,
+    return res.status(400).json({
       message: "Refresh token is missing or invalid.",
     });
 
@@ -135,8 +129,7 @@ export async function refresh(req: Request, res: Response) {
     const user = await UserModel.findById(decoded.userId);
 
     if (!user)
-      return res.easyResponse({
-        statusCode: 401,
+      return res.status(401).json({
         message: "User not found, please log in again.",
       });
 
@@ -148,27 +141,25 @@ export async function refresh(req: Request, res: Response) {
       secure: ENV.NODE_ENV === "production", // Use secure cookies in production
     });
 
-    return res.easyResponse({
-      statusCode: 200,
+    return res.status(200).json({
       message: "Tokens refreshed successfully.",
       payload: {
         accessToken,
       },
     });
   } catch (err) {
-    return res.easyResponse({
-      statusCode: 401,
-      message: "Invalid or expired refresh token.",
-      error: err as Error,
-    });
+    return next(
+      new AppError("Invalid or expired refresh token.", 401, {
+        cause: err as Error,
+      })
+    );
   }
 }
 
 export async function logout(req: Request, res: Response) {
   res.clearCookie("refreshToken");
   /* In future, we have to remove JTI from whiteList in redis */
-  res.easyResponse({
-    statusCode: 200,
+  return res.status(200).json({
     message: "User successfully logged out",
   });
 }

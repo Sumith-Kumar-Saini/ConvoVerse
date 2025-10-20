@@ -7,7 +7,6 @@ import cors from "cors";
 
 import { morganMiddleware } from "./middlewares/morgan.middleware";
 import globalErrorHandler from "./middlewares/errorHandler";
-import ApiResponse from "./middlewares/easyResponse";
 import lazyRouter from "./utils/lazyLoadRoutes";
 import AppError from "./utils/AppError";
 
@@ -21,12 +20,11 @@ app.use(CookieParser());
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morganMiddleware());
-app.use(ApiResponse.easyResponse());
 
 // Base route
 app.get("/", (_, res: Response) => {
   const message = "Server is running properly";
-  res.easyResponse(200, message);
+  res.status(200).json({ message });
 });
 
 // Lazy-load routes
