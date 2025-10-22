@@ -7,16 +7,16 @@ ConvoVerse is an AI-powered chat system designed to provide users with a seamles
 ```
 
 root/
-├── client/                     # React frontend
-│   ├── public/                 # Public files (e.g., index.html)
-│   ├── src/                    # React source code
-│   │   ├── components/         # React components
-│   │   ├── styles/             # Global styles
-│   │   ├── store/              # Redux store setup
-│   │   ├── App.tsx             # Main app component
-│   │   └── main.tsx            # Entry point for React
-│   ├── package.json            # Frontend dependencies
-│   └── vite.config.ts          # Vite config for frontend
+├── client/                       # React frontend
+│   ├── public/                   # Public files (e.g., index.html)
+│   ├── src/                      # React source code
+│   │   ├── components/           # React components
+│   │   ├── styles/               # Global styles
+│   │   ├── store/                # Redux store setup
+│   │   ├── App.tsx               # Main app component
+│   │   └── main.tsx              # Entry point for React
+│   ├── package.json              # Frontend dependencies
+│   └── vite.config.ts            # Vite config for frontend
 ├── server/                       # Backend (Express + Socket.IO + Redis)
 │   ├── package.json              # Backend dependencies
 │   └── src/                      # Source code for the server
@@ -37,8 +37,8 @@ root/
 │       ├── types/                # TypeScript type definitions
 │       └── utils/                # Utility functions and helpers
 │           └── logger/           # Logger setup using transports and formatters
-├── package.json                # Root project dependencies
-└── README.md                   # Project documentation
+├── package.json                  # Root project dependencies
+└── README.md                     # Project documentation
 
 ```
 
