@@ -22,6 +22,16 @@ const ChatSchema = new Schema<IChat>(
   }
 );
 
+// Method to remove specific fields dynamically
+ChatSchema.methods.removeFields = function (_fields: string) {
+  const chat = this.toObject();
+  const fields = _fields.split(" ");
+  fields.forEach((field) => {
+    delete chat[field]; // Dynamically remove the fields from the user object
+  });
+  return chat;
+};
+
 const ChatModel = mongoose.models.Chat || model<IChat>("Chat", ChatSchema);
 
 export default ChatModel;
