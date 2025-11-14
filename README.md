@@ -1,5 +1,7 @@
 # ConvoVerse
 
+`🟡 In Process`
+
 ConvoVerse is an AI-powered chat system designed to provide users with a seamless, real-time communication platform. It uses the Gemini 2.0 Flash AI to generate intelligent responses and integrates the MERN stack (MongoDB, Express.js, React.js, Node.js) with Socket.io for real-time messaging, Redis for session management, and JWT for authentication.
 
 ## Project Structure
