@@ -5,8 +5,11 @@ export class ChatHandler implements ISocketEventHandler {
   register(socket: Socket): void {
     socket.on(
       "chat:open",
-      ({ chatId }: { chatId: string }, ack?: (response: any) => void) =>
-        ack && ack("Chat open Event is working")
+      ({ chatId }: { chatId: string }, ack?: (response: any) => void) => {
+        // load the STM to memory
+        // give ack to client socket for next process
+        // ( optional ) ping the worker running on BullMQ
+      }
     );
   }
 }
