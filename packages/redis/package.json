@@ -1,0 +1,13 @@
+{
+  "name": "@convoverse/redis",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "files": ["dist"],
+  "sideEffects": false,
+  "dependencies": {
+    "ioredis": "^5.7.0"
+  }
+}

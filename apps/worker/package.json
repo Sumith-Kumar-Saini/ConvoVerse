@@ -1,0 +1,11 @@
+{
+  "name": "@convoverse/worker",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "dev": "node esbuild.config.js --watch",
+    "start": "node dist/index.js"
+  }
+}

@@ -1,22 +1,35 @@
 const esbuild = require("esbuild");
+const path = require("path");
+
+const isWatch = process.argv.includes("--watch");
 
 esbuild
   .build({
-    entryPoints: ["src/server.ts"], // compile all .ts files
-    outdir: "./dist", // keep directory structure
-    platform: "node", // Node environment
-    target: "esnext", // pick your Node version
+    entryPoints: ["src/server.ts"],
+    outdir: "dist",
+    platform: "node",
+    target: "node20",
     format: "cjs",
     bundle: true,
     sourcemap: true,
-    minify: false, // optional
+    minify: false,
     logLevel: "info",
+    absWorkingDir: path.resolve(__dirname),
+    tsconfig: path.resolve(__dirname, "../../tsconfig.base.json"),
+    external: ["ioredis", "bullmq"],
+
+    watch: isWatch && {
+      onRebuild(error) {
+        if (error) console.error("Rebuild failed:", error);
+        else console.log("Rebuilt successfully");
+      },
+    },
   })
   .then(() => {
-    console.log("esbuild build successful!");
+    console.log("server build successful");
     process.exit(0);
   })
   .catch((error) => {
-    console.error("esbuild build failed:", error);
+    console.error(error);
     process.exit(1);
   });

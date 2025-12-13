@@ -9,8 +9,15 @@ import { createServer } from "http";
 import { logger } from "./utils/logger";
 import { ENV } from "./configs/env";
 import connectDB from "./configs/db";
-import { RedisProvider } from "./providers/redis-client.provider";
+import RedisClient, { setRedisLogger } from "@convoverse/redis";
 import { socketServer } from "./sockets";
+
+setRedisLogger({
+  debug: logger.debug.bind(logger),
+  error: logger.error.bind(logger),
+  info: logger.info.bind(logger),
+  warn: logger.warn.bind(logger),
+});
 
 async function bootstrap() {
   logger.info("Starting server initialization...");
@@ -30,7 +37,7 @@ async function bootstrap() {
 
     const [dbConnection, redisClient, io] = await Promise.all([
       connectDB(),
-      RedisProvider.client(),
+      RedisClient.getBase(),
       socketServer(server),
     ]);
 
@@ -42,7 +49,7 @@ async function bootstrap() {
 
       io?.close();
       await dbConnection?.close();
-      await redisClient?.disconnect();
+      await redisClient.disconnect();
 
       server.close(() => {
         logger.info("HTTP server closed");
