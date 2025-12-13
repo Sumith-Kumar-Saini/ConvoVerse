@@ -5,18 +5,10 @@ import { ENV } from "../configs/env";
 
 export class RedisProvider {
   private static instance: RedisClient | null = null;
-  private static connecting: Promise<void> | null = null;
 
   private static async init(): Promise<RedisClient> {
-    if (!this.instance) {
-      this.instance = new RedisClient(new RedisConfig(ENV.REDIS));
-      this.connecting = this.instance.connect();
-      await this.connecting;
-      this.connecting = null;
-    } else if (this.connecting) {
-      await this.connecting;
-    }
-
+    this.instance = new RedisClient(new RedisConfig(ENV.REDIS));
+    await this.instance.connect();
     return this.instance;
   }
 
