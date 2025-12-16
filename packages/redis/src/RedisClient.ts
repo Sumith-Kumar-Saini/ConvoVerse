@@ -1,4 +1,5 @@
 import Redis, { RedisOptions } from "ioredis";
+
 import { getRedisLogger } from "./logger-plugin";
 
 function getOptions() {

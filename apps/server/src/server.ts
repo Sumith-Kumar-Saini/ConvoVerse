@@ -6,10 +6,12 @@
  */
 
 import { createServer } from "http";
+
+import RedisClient, { setRedisLogger } from "@convoverse/redis";
+
 import { logger } from "./utils/logger";
 import { ENV } from "./configs/env";
 import connectDB from "./configs/db";
-import RedisClient, { setRedisLogger } from "@convoverse/redis";
 import { socketServer } from "./sockets";
 
 setRedisLogger({

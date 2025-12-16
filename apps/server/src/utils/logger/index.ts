@@ -1,6 +1,8 @@
-import { createLogger } from "winston";
 import path from "path";
 import fs from "fs";
+
+import { createLogger } from "winston";
+
 import { logFormat } from "./format";
 import { consoleTransport } from "./transports/console.transport";
 import { fileTransport } from "./transports/file.transport";

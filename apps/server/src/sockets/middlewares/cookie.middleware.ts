@@ -1,6 +1,7 @@
-import { ISocketMiddleware } from "../interfaces/ISocketMiddleware";
 import { Socket } from "socket.io";
 import cookie from "cookie";
+
+import { ISocketMiddleware } from "../interfaces/ISocketMiddleware";
 
 export class CookieMiddleware implements ISocketMiddleware {
   handle(socket: Socket, next: (err?: Error) => void): void {

@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+
 import { IMsg } from "../types";
 
 const MsgSchema = new Schema<IMsg>(

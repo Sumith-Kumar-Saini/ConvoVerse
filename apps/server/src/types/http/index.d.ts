@@ -1,6 +1,4 @@
-import { IncomingMessage } from "http";
-
-declare module "http" {
+declare module 'http' {
   interface IncomingMessage {
     cookies?: Record<string, string>;
   }

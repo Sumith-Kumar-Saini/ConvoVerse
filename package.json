@@ -7,7 +7,11 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=app/client\" \"npm run dev --workspace=app/server\"",
-    "build": "concurrently \"npm run build --workspace=app/client\" \"npm run build --workspace=app/server\""
+    "build": "concurrently \"npm run build --workspace=app/client\" \"npm run build --workspace=app/server\"",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write"
   },
   "dependencies": {
     "concurrently": "^9.2.0"
@@ -15,5 +19,13 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.50.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^3.7.4"
+  }
 }

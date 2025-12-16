@@ -1,10 +1,11 @@
 // src/app/socketBootstrap.ts
+import { Server } from "http";
+
 import { SocketServer } from "./core/SocketServer";
 import { CookieMiddleware } from "./middlewares/cookie.middleware";
 import { MessageHandler } from "./handlers/message.handler";
 import { ConnectionHandler } from "./handlers/connection.handler";
 import { ChatHandler } from "./handlers/chat.handler";
-import { Server } from "http";
 
 export function socketServer(server: Server): SocketServer {
   const middlewares = [new CookieMiddleware()];

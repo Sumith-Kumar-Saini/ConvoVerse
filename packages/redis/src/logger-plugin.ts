@@ -1,5 +1,5 @@
-import { RedisLogger } from "./types";
-import { defaultLogger } from "./logger";
+import { RedisLogger } from './types';
+import { defaultLogger } from './logger';
 
 let activeLogger: RedisLogger = defaultLogger;
 

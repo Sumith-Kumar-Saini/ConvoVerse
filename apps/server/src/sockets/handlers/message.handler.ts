@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+
 import { ISocketEventHandler } from "../interfaces/ISocketEventHandler";
 
 export class MessageHandler implements ISocketEventHandler {

@@ -1,4 +1,5 @@
 import morgan from "morgan";
+
 import { loggerStream } from "../utils/logger";
 
 const skip = () => {

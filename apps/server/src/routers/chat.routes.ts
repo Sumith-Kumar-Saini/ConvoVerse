@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
-import { authorize } from "../middlewares/auth.middleware";
 import mongoose from "mongoose";
+
+import { authorize } from "../middlewares/auth.middleware";
 import ChatModel from "../models/chat.model";
 import { catchAsync } from "../utils/catchAsync";
 import { IChat } from "../types";

@@ -1,5 +1,7 @@
 import { Server as HttpServer } from "http";
+
 import { Server as SocketIOServer, Socket } from "socket.io";
+
 import { ISocketMiddleware } from "../interfaces/ISocketMiddleware";
 import { ISocketEventHandler } from "../interfaces/ISocketEventHandler";
 
