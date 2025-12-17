@@ -1,0 +1,17 @@
+{
+  "name": "@convoverse/queue",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@convoverse/redis": "*",
+    "bullmq": "^5.66.1",
+    "ioredis": "^5.7.0"
+  }
+}
