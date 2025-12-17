@@ -9,7 +9,6 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "emitDeclarationOnly": false
   },
-  "references": [{ "path": "../utils" }, { "path": "../redis" }],
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

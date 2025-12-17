@@ -1,0 +1,12 @@
+{
+  "name": "@convoverse/utils",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false
+}
