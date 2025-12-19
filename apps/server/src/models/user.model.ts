@@ -1,8 +1,8 @@
-import mongoose, { Schema, model } from "mongoose";
-import bcrypt from "bcryptjs";
+import mongoose, { Schema, model } from 'mongoose';
+import bcrypt from 'bcryptjs';
 
-import { ENV } from "../configs/env";
-import { IUser } from "../types";
+import { ENV } from '../configs/env';
+import { IUser } from '../types';
 
 const { BCRYPT_SALT_ROUNDS: SALT_ROUNDS } = ENV;
 
@@ -24,13 +24,13 @@ const UserSchema = new Schema<IUser>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Pre-save hook for hashing
-UserSchema.pre("save", async function (next) {
+UserSchema.pre<IUser>('save', async function (next) {
   if (!this.password) return next();
-  if (!this.isModified("password")) return next();
+  if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(SALT_ROUNDS);
   this.password = await bcrypt.hash(this.password, salt);
   next();
@@ -39,7 +39,7 @@ UserSchema.pre("save", async function (next) {
 // Method to remove specific fields dynamically
 UserSchema.methods.removeFields = function (_fields: string) {
   const user = this.toObject();
-  const fields = _fields.split(" ");
+  const fields = _fields.split(' ');
   fields.forEach((field) => {
     delete user[field]; // Dynamically remove the fields from the user object
   });
@@ -48,10 +48,10 @@ UserSchema.methods.removeFields = function (_fields: string) {
 
 // Custom toJSON method to exclude password by default
 UserSchema.methods.toJSON = function () {
-  const user = this.removeFields("password");
+  const user = this.removeFields('password');
   return user;
 };
 
-const UserModel = mongoose.models.User || model<IUser>("User", UserSchema);
+const UserModel = mongoose.models.User || model<IUser>('User', UserSchema);
 
 export default UserModel;
