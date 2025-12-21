@@ -1,6 +1,7 @@
 import mongoose, { Schema, model } from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { IUser, IUserDoc } from '../types';
+
+import { IUserDoc } from '../types';
 
 const SALT_ROUNDS = 10;
 
@@ -22,6 +23,13 @@ const UserSchema = new Schema<IUserDoc>(
   },
   { timestamps: true },
 );
+
+UserSchema.pre<IUserDoc>('save', async function () {
+  if (!this.password) return;
+  if (!this.isModified('password')) return;
+  const salt = await bcrypt.genSalt(SALT_ROUNDS);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 UserSchema.methods.removeFields = function (_fields: string) {
   const user = this.toObject();

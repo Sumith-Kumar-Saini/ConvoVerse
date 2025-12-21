@@ -5,14 +5,14 @@
  * Implements graceful shutdown and non-blocking startup.
  */
 
-import { createServer } from "http";
+import { createServer } from 'http';
 
-import RedisClient, { setRedisLogger } from "@convoverse/redis";
+import RedisClient, { setRedisLogger } from '@convoverse/redis';
+import { connection } from '@convoverse/database';
 
-import { logger } from "./utils/logger";
-import { ENV } from "./configs/env";
-import connectDB from "./configs/db";
-import { socketServer } from "./sockets";
+import { logger } from './utils/logger';
+import { ENV } from './configs/env';
+import { socketServer } from './sockets';
 
 setRedisLogger({
   debug: logger.debug.bind(logger),
@@ -22,9 +22,9 @@ setRedisLogger({
 });
 
 async function bootstrap() {
-  logger.info("Starting server initialization...");
+  logger.info('Starting server initialization...');
 
-  const { default: app } = await import("./app");
+  const { default: app } = await import('./app');
   const server = createServer(app);
   const { PORT } = ENV;
 
@@ -35,15 +35,15 @@ async function bootstrap() {
 
   // Initialize dependencies asynchronously
   try {
-    logger.info("Connecting dependencies...");
+    logger.info('Connecting dependencies...');
 
-    const [dbConnection, redisClient, io] = await Promise.all([
-      connectDB(),
-      RedisClient.getBase(),
+    const [dbConnection, io, redisClient] = await Promise.all([
+      connection(ENV.MONGODB_URI, { logger }),
       socketServer(server),
+      RedisClient.getBase(),
     ]);
 
-    logger.info("All dependencies connected successfully");
+    logger.info('All dependencies connected successfully');
 
     // Graceful shutdown
     const shutdown = async (signal: string) => {
@@ -54,15 +54,15 @@ async function bootstrap() {
       await redisClient.disconnect();
 
       server.close(() => {
-        logger.info("HTTP server closed");
+        logger.info('HTTP server closed');
         process.exit(0);
       });
     };
 
-    process.on("SIGINT", () => shutdown("SIGINT"));
-    process.on("SIGTERM", () => shutdown("SIGTERM"));
+    process.on('SIGINT', () => shutdown('SIGINT'));
+    process.on('SIGTERM', () => shutdown('SIGTERM'));
   } catch (err) {
-    logger.error("Startup error:", err);
+    logger.error('Startup error:', err);
     process.exit(1);
   }
 }

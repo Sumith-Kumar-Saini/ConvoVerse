@@ -45,9 +45,6 @@ export default class RedisClient {
 
     if (!this.connecting) {
       this.connecting = (async () => {
-        const logger = getRedisLogger();
-        logger.info("Initializing Redis base client");
-
         const client = new Redis(getOptions());
         attachLogging(client, "base");
 

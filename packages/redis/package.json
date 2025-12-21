@@ -4,8 +4,13 @@
   "private": true,
   "type": "commonjs",
   "main": "dist/index.js",
-  "types": "dist/index.d.js",
-  "files": ["dist"],
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "dependencies": {
     "ioredis": "^5.7.0"

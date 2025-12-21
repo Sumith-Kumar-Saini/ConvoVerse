@@ -6,7 +6,7 @@ const RETRY_DELAY_MS = 2000;
 
 export async function connection(
   MONGODB_URI: string,
-  { logger, retries }: { logger?: winston.Logger; retries: number } = { retries: MAX_RETRIES },
+  { logger, retries = MAX_RETRIES }: { logger?: winston.Logger; retries?: number },
 ) {
   try {
     await mongoose.connect(MONGODB_URI);
