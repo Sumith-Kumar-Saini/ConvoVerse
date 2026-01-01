@@ -22,7 +22,6 @@ Thumbs.db
 .vscode/
 
 # NPM packages lock file (optional, but can be ignored if you want to re-install dependencies)
-package-lock.json
 yarn.lock
 
 # IDE and Editor folders/files
