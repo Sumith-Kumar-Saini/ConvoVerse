@@ -1,28 +1,63 @@
-import { Request, Response, Router } from "express";
-import mongoose from "mongoose";
+import { NextFunction, Request, Response, Router } from 'express';
+import { ChatModel, IChatDoc } from '@convoverse/database';
+import mongoose from 'mongoose';
 
-import { authorize } from "../middlewares/auth.middleware";
-import ChatModel from "../models/chat.model";
-import { catchAsync } from "../utils/catchAsync";
-import { IChat } from "../types";
+import { authorize } from '../middlewares/auth.middleware';
+import { catchAsync } from '../utils/catchAsync';
+import { getLatestDocuments } from '../services/chat.service';
+import AppError from '../utils/AppError';
+// import { IChat } from '../types';
 
 const router = Router();
 
 router.post(
-  "/",
+  '/',
   authorize,
   catchAsync(async (req: Request, res: Response) => {
-    const { title = "Untitled" } = (req.body || {}) as { title?: string };
+    const { title = 'Untitled' } = (req.body || {}) as { title?: string };
 
-    const user = (req as any).user as { id: string };
-    const ownerId = new mongoose.Types.ObjectId(user.id);
+    const user = req.user;
+    const ownerId = new mongoose.Types.ObjectId(user?.id);
 
-    const chat = await ChatModel.create<IChat>({ createdBy: ownerId, title });
+    const chat = (await ChatModel.create({ createdBy: ownerId, title })) as IChatDoc;
 
-    return res
-      .status(200)
-      .json({ message: "Chat has been created!", payload: { chat } });
-  })
+    return res.status(201).json({
+      success: true,
+      message: 'Chat has been created!',
+      data: {
+        id: chat._id.toString(),
+        title: chat.title,
+        status: chat.status,
+        pinned: chat.pinned,
+        createdAt: chat.createdAt,
+        updatedAt: chat.updatedAt,
+      },
+    });
+  }),
+);
+
+router.get(
+  '/list',
+  authorize,
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) return next(new AppError('Invalid or expired token.', 401));
+
+    const page = parseInt(String(req.query.page ?? '1'), 10);
+    const limit = parseInt(String(req.query.limit ?? '10'), 10);
+
+    const chats = await getLatestDocuments({ page, limit, createdBy: req.user.id });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Chats fetched successfully',
+      data: chats,
+      meta: {
+        page,
+        limit,
+        count: chats.length,
+      },
+    });
+  }),
 );
 
 /**

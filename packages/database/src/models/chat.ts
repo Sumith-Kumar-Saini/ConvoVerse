@@ -18,16 +18,24 @@ const ChatSchema = new Schema<IChatDoc>(
   },
   {
     timestamps: true,
+    toJSON: {
+      transform(_doc, ret: any) {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+
+    toObject: {
+      transform(_doc, ret: any) {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
   },
 );
-
-ChatSchema.methods.removeFields = function (_fields: string) {
-  const chat = this.toObject();
-  const fields = _fields.split(' ');
-  fields.forEach((field) => {
-    delete chat[field];
-  });
-  return chat;
-};
 
 export const ChatModel = mongoose.models?.Chat || model<IChatDoc>('Chat', ChatSchema);

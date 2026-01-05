@@ -9,5 +9,6 @@ export interface IChat {
 }
 
 export interface IChatDoc extends Document<Types.ObjectId>, IChat {
-  removeFields: (_fields: string) => IChatDoc;
+  createdAt: Date;
+  updatedAt: Date;
 }
