@@ -64,9 +64,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await UserModel.findOne<IUserDoc>({
       $or: [{ username: identifier }, { email: identifier }],
-    });
+    }).select('+password');
 
     if (!user) return next(new AppError('No account found with the provided credentials.', 404));
+    if (!user.password) return next(new AppError('Authentication configuration error', 500));
 
     const isValid = await bcrypt.compare(password, user.password);
 
