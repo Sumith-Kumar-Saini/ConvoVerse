@@ -1,4 +1,4 @@
-import { Document, Types } from 'mongoose';
+import { Types, HydratedDocument } from 'mongoose';
 
 export interface IUser {
   username: string;
@@ -6,6 +6,8 @@ export interface IUser {
   password: string;
 }
 
-export interface IUserDoc extends Document<Types.ObjectId>, IUser {
-  removeFields: (_fields: string) => IUserDoc | IUser;
-}
+export type IUserDoc = HydratedDocument<IUser> & {
+  _id: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+};

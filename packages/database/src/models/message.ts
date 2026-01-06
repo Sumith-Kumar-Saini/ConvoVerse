@@ -1,6 +1,13 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
-import { IMsgDoc } from '../types';
+import type { IMsgDoc } from '../types';
+
+const transform = (_doc: unknown, ret: any) => {
+  ret.id = ret._id.toString();
+  delete ret._id;
+  delete ret.__v;
+  return ret;
+};
 
 const MsgSchema = new Schema<IMsgDoc>(
   {
@@ -16,23 +23,23 @@ const MsgSchema = new Schema<IMsgDoc>(
       required: true,
       index: true,
     },
-    content: { type: String, required: true },
-    role: { type: String, enum: ['system', 'user', 'assistant'] },
+    content: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: ['system', 'user', 'assistant'],
+      required: true,
+    },
   },
   {
     timestamps: true,
+    toJSON: { transform },
+    toObject: { transform },
   },
 );
 
-MsgSchema.methods.removeFields = function (_fields: string) {
-  const chat = this.toObject();
-  const fields = _fields.split(' ');
-  fields.forEach((field) => {
-    delete chat[field];
-  });
-  return chat;
-};
-
-const MsgModel = mongoose.models.Message || model<IMsgDoc>('Message', MsgSchema);
+const MsgModel = models.Message || model<IMsgDoc>('Message', MsgSchema);
 
 export default MsgModel;

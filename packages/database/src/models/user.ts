@@ -1,9 +1,17 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-import { IUserDoc } from '../types';
+import type { IUserDoc } from '../types';
 
 const SALT_ROUNDS = 10;
+
+const transform = (_doc: unknown, ret: any) => {
+  ret.id = ret._id.toString();
+  delete ret._id;
+  delete ret.__v;
+  delete ret.password;
+  return ret;
+};
 
 const UserSchema = new Schema<IUserDoc>(
   {
@@ -11,38 +19,32 @@ const UserSchema = new Schema<IUserDoc>(
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
     password: {
       type: String,
+      required: true,
+      select: false,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { transform },
+    toObject: { transform },
+  },
 );
 
-UserSchema.pre<IUserDoc>('save', async function () {
-  if (!this.password) return;
+UserSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
+
   const salt = await bcrypt.genSalt(SALT_ROUNDS);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-UserSchema.methods.removeFields = function (_fields: string) {
-  const user = this.toObject();
-  const fields = _fields.split(' ');
-  fields.forEach((field) => {
-    delete user[field];
-  });
-  return user;
-};
-
-UserSchema.methods.toJSON = function () {
-  const user = this.removeFields('password');
-  return user;
-};
-
-export const UserModel = mongoose.models.User || model<IUserDoc>('User', UserSchema);
+export const UserModel = models.User || model<IUserDoc>('User', UserSchema);

@@ -33,8 +33,6 @@ export async function register(req: Request, res: Response, next: NextFunction) 
     // we would use JWT ID in future to whitelist the user account
     const { /* JTI, */ refreshToken, accessToken } = generateToken(user._id.toString());
 
-    const sanitizedUser = user.removeFields('createdAt updatedAt __v password');
-
     res.cookie('refreshToken', refreshToken, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
@@ -44,7 +42,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
     return res.status(201).json({
       message: 'User successfully created',
       payload: {
-        user: sanitizedUser,
+        user: user.toJSON(),
         accessToken,
       },
     });
@@ -76,8 +74,6 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     const { /* JTI, */ accessToken, refreshToken } = generateToken(user._id.toString());
 
-    const sanitizedUser = user.removeFields('createdAt updatedAt __v password');
-
     res.cookie('refreshToken', refreshToken, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
@@ -87,7 +83,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     return res.status(200).json({
       message: 'Login successful',
       payload: {
-        user: sanitizedUser,
+        user: user.toJSON(),
         accessToken,
       },
     });
