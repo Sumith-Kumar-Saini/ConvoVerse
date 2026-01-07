@@ -1,9 +1,9 @@
-import { Server as HttpServer } from "http";
+import { Server as HttpServer } from 'http';
 
-import { Server as SocketIOServer, Socket } from "socket.io";
+import { Server as SocketIOServer, Socket } from 'socket.io';
 
-import { ISocketMiddleware } from "../interfaces/ISocketMiddleware";
-import { ISocketEventHandler } from "../interfaces/ISocketEventHandler";
+import { ISocketMiddleware } from '../interfaces/ISocketMiddleware';
+import { ISocketEventHandler } from '../interfaces/ISocketEventHandler';
 
 export class SocketServer {
   private io: SocketIOServer;
@@ -11,7 +11,7 @@ export class SocketServer {
   constructor(
     private readonly httpServer: HttpServer,
     private readonly middlewares: ISocketMiddleware[] = [],
-    private readonly handlers: ISocketEventHandler[] = []
+    private readonly handlers: ISocketEventHandler[] = [],
   ) {
     this.io = new SocketIOServer(this.httpServer);
   }
@@ -26,7 +26,7 @@ export class SocketServer {
   }
 
   private applyHandlers(): void {
-    this.io.on("connection", (socket: Socket) => {
+    this.io.on('connection', (socket: Socket) => {
       this.handlers.forEach((handler) => handler.register(socket));
     });
   }

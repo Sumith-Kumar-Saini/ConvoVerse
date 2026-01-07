@@ -4,21 +4,17 @@ export interface AppErrorOptions {
 
 export default class AppError extends Error {
   public statusCode: number;
-  public status: "fail" | "error";
+  public status: 'fail' | 'error';
   public isOperational: boolean;
   public cause?: Error;
 
-  constructor(
-    message: string,
-    statusCode: number,
-    options: AppErrorOptions = {}
-  ) {
+  constructor(message: string, statusCode: number, options: AppErrorOptions = {}) {
     super(message);
 
     Object.setPrototypeOf(this, new.target.prototype); // Restore prototype chain
 
     this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
+    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
     this.isOperational = true;
 
     if (options.cause instanceof Error) {

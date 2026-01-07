@@ -1,10 +1,10 @@
-import Redis, { RedisOptions } from "ioredis";
+import Redis, { RedisOptions } from 'ioredis';
 
-import { getRedisLogger } from "./logger-plugin";
+import { getRedisLogger } from './logger-plugin';
 
 function getOptions() {
   const options: RedisOptions = {
-    host: process.env.REDIS_HOST ?? "127.0.0.1",
+    host: process.env.REDIS_HOST ?? '127.0.0.1',
     port: Number(process.env.REDIS_PORT ?? 6379),
     username: process.env.REDIS_USERNAME,
     password: process.env.REDIS_PASSWORD,
@@ -19,19 +19,17 @@ function getOptions() {
 function attachLogging(client: Redis, name: string) {
   const logger = getRedisLogger();
 
-  client.on("connect", () => logger.info(`Redis [${name}] connecting`));
+  client.on('connect', () => logger.info(`Redis [${name}] connecting`));
 
-  client.on("ready", () => logger.info(`Redis [${name}] ready`));
+  client.on('ready', () => logger.info(`Redis [${name}] ready`));
 
-  client.on("reconnecting", (delay: number) =>
-    logger.warn(`Redis [${name}] reconnecting`, { delay })
+  client.on('reconnecting', (delay: number) =>
+    logger.warn(`Redis [${name}] reconnecting`, { delay }),
   );
 
-  client.on("error", (err) =>
-    logger.error(`Redis [${name}] error`, { error: err.message })
-  );
+  client.on('error', (err) => logger.error(`Redis [${name}] error`, { error: err.message }));
 
-  client.on("close", () => logger.warn(`Redis [${name}] closed`));
+  client.on('close', () => logger.warn(`Redis [${name}] closed`));
 }
 
 export default class RedisClient {
@@ -46,7 +44,7 @@ export default class RedisClient {
     if (!this.connecting) {
       this.connecting = (async () => {
         const client = new Redis(getOptions());
-        attachLogging(client, "base");
+        attachLogging(client, 'base');
 
         await client.connect();
         this.base = client;
@@ -64,10 +62,10 @@ export default class RedisClient {
 
     const base = await this.getBase();
     const logger = getRedisLogger();
-    logger.info("Creating Redis publisher");
+    logger.info('Creating Redis publisher');
 
     const pub = base.duplicate();
-    attachLogging(pub, "publisher");
+    attachLogging(pub, 'publisher');
 
     await pub.connect();
     this.pub = pub;
@@ -79,10 +77,10 @@ export default class RedisClient {
 
     const base = await this.getBase();
     const logger = getRedisLogger();
-    logger.info("Creating Redis subscriber");
+    logger.info('Creating Redis subscriber');
 
     const sub = base.duplicate();
-    attachLogging(sub, "subscriber");
+    attachLogging(sub, 'subscriber');
 
     await sub.connect();
     this.sub = sub;
@@ -91,7 +89,7 @@ export default class RedisClient {
 
   static async close(): Promise<void> {
     const logger = getRedisLogger();
-    logger.info("Closing Redis connections");
+    logger.info('Closing Redis connections');
 
     await Promise.all(
       [this.sub, this.pub, this.base].map(async (client) => {
@@ -99,9 +97,9 @@ export default class RedisClient {
         try {
           await client.quit();
         } catch (err) {
-          logger.error("Redis close error", err);
+          logger.error('Redis close error', err);
         }
-      })
+      }),
     );
 
     this.base = undefined;

@@ -66,11 +66,11 @@ root/
 ```bash
 git clone https://github.com/Sumith-Kumar-Saini/convoverse.git
 cd convoverse
-````
+```
 
 ### 2. Install dependencies
 
-* For both **client** and **server**:
+- For both **client** and **server**:
 
 ```bash
 npm install
@@ -91,14 +91,14 @@ JWT_SECRET=your_jwt_secret
 
 ### 4. Run the application
 
-* Start the **server**:
+- Start the **server**:
 
 ```bash
 cd server
 npm run dev
 ```
 
-* Start the **client**:
+- Start the **client**:
 
 ```bash
 cd client

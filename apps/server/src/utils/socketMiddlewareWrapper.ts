@@ -1,9 +1,9 @@
-import { Socket } from "socket.io";
-import { Request, Response } from "express";
+import { Socket } from 'socket.io';
+import { Request, Response } from 'express';
 
 // Wrapper function that takes any Express-style middleware
 export function wrapper(
-  middleware: (req: Request, res: Response, next: (err?: any) => void) => void
+  middleware: (req: Request, res: Response, next: (err?: any) => void) => void,
 ) {
   return function (socket: Socket, next: (err?: any) => void) {
     // Mock the Express `Request` object by extending `socket.request`

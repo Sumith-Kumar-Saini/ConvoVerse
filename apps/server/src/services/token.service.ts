@@ -1,19 +1,19 @@
-import crypto from "node:crypto";
+import crypto from 'node:crypto';
 
-import JWT from "jsonwebtoken";
+import JWT from 'jsonwebtoken';
 
-import { ENV } from "../configs/env";
+import { ENV } from '../configs/env';
 
 const generateAccessToken = (payload: Record<string, any>) => {
   const token = JWT.sign(payload, ENV.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15m",
+    expiresIn: '15m',
   });
   return token;
 };
 
 const generateRefreshToken = (payload: Record<string, any>) => {
   const token = JWT.sign(payload, ENV.REFRESH_TOKEN_SECRET, {
-    expiresIn: "7d",
+    expiresIn: '7d',
   });
   return token;
 };

@@ -1,10 +1,10 @@
-import morgan from "morgan";
+import morgan from 'morgan';
 
-import { loggerStream } from "../utils/logger";
+import { loggerStream } from '../utils/logger';
 
 const skip = () => {
-  const env = process.env.NODE_ENV || "development";
-  return env === "test";
+  const env = process.env.NODE_ENV || 'development';
+  return env === 'test';
 };
 
 // Color helper
@@ -17,16 +17,13 @@ const colorStatus = (status: number) => {
 };
 
 // Define a custom Morgan format
-morgan.token("colored-status", (_, res): string => {
+morgan.token('colored-status', (_, res): string => {
   const status = res.statusCode;
   return String(colorStatus(status));
 });
 
 export const morganMiddleware = () =>
-  morgan(
-    ":method :url :colored-status :res[content-length] - :response-time ms",
-    {
-      stream: loggerStream,
-      skip,
-    }
-  );
+  morgan(':method :url :colored-status :res[content-length] - :response-time ms', {
+    stream: loggerStream,
+    skip,
+  });

@@ -1,4 +1,4 @@
-import { RedisLogger } from "./types";
+import { RedisLogger } from './types';
 
 export const defaultLogger: RedisLogger = {
   debug: () => {},

@@ -5,9 +5,15 @@
   "type": "commonjs",
   "main": "dist/server.js",
   "scripts": {
-    "build": "node esbuild.config.js",
-    "dev": "nodemon",
-    "start": "node dist/server.js"
+    "start": "node dist/bundle.js",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "build": "node esbuild.config.js --minify --sourcemap",
+    "typecheck:watch": "tsc --noEmit --watch --preserveWatchOutput > logs/types.log 2>&1",
+    "build:watch": "node esbuild.config.js --watch > logs/build.log 2>&1",
+    "dev:run": "nodemon --watch dist --delay 100ms -ext js --exec \"node dist/server.js\" > logs/server.log 2>&1",
+    "dev:ts-node": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
+    "dev": "concurrently -k \"npm run build:watch\" \"npm run typecheck:watch\" \"npm run dev:run\""
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.11",
@@ -46,7 +52,9 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.3.0",
+    "concurrently": "^9.2.1",
     "esbuild": "^0.25.12",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
 }
