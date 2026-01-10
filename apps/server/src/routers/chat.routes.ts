@@ -69,7 +69,7 @@ router.get(
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) return next(new AppError('Invalid or expired token.', 401));
 
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return next(new AppError('Invalid chat id.', 400));
@@ -110,7 +110,7 @@ router.patch(
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) return next(new AppError('Invalid or expired token.', 401));
 
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return next(new AppError('Invalid chat id.', 400));
@@ -171,7 +171,7 @@ router.delete(
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) return next(new AppError('Invalid or expired token.', 401));
 
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return next(new AppError('Invalid chat id.', 400));

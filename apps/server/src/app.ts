@@ -55,9 +55,11 @@ app.get('/', (_, res: Response) => {
 (async () => {
   const authRouter = lazyRouter(() => import('./routers/auth.routes'));
   const chatRouter = lazyRouter(() => import('./routers/chat.routes'));
+  const messageRouter = lazyRouter(() => import('./routers/message.routes'));
 
   app.use('/api/auth', authRouter);
   app.use('/api/chat', chatRouter);
+  app.use('/api/chat/:chatId/messages', messageRouter);
 })();
 
 // ----------------------

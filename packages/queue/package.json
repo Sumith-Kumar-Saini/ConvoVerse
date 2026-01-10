@@ -16,6 +16,6 @@
     "@convoverse/redis": "*",
     "@convoverse/utils": "*",
     "bullmq": "^5.66.1",
-    "ioredis": "^5.7.0"
+    "ioredis": "^5.9.1"
   }
 }

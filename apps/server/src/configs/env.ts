@@ -10,6 +10,7 @@ const _config = {
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
   ENABLE_XSS_PROTECTION: Boolean(process.env.ENABLE_XSS_PROTECTION),
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
+  GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
   REDIS: {
     HOST: process.env.REDIS_HOST || 'localhost',
     PORT: Number(process.env.REDIS_PORT) || 6379,

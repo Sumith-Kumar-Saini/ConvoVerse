@@ -13,8 +13,8 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@convoverse/redis": "*",
     "@ai-sdk/google": "^2.0.13",
-    "ai": "^1.0.0"
+    "@convoverse/redis": "*",
+    "ai": "^6.0.27"
   }
 }

@@ -1,3 +1,5 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
-export const google = createGoogleGenerativeAI({});
+import { ENV } from './env';
+
+export const google = createGoogleGenerativeAI({ apiKey: ENV.GOOGLE_API_KEY });
